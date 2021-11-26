@@ -43,12 +43,13 @@ int readDicFile(p_dictionnary d, char* s_dicFile)
 			char* ptr = strchr(key, '#');
 			int index = ptr - key;
 
-			if (*key != 0 && index != 0)												// All spaces or start with '#'?
+			if (*key != 0 && index != 0) {										// All spaces or start with '#'?
 				end = key + strlen(key) - 1;
 				while (end > key && isspace((unsigned char)*end)) end--;				// Trim trailing space
-				
+
 				end[1] = '\0';															// Write new null terminator character
 				addWord(d, key, 0);
+			}
 		}
 	}
 	key = NULL;
@@ -124,7 +125,6 @@ void displayDictionnary(p_dictionnary d)
 	
 	for (int i = 0; i < d->len; i++) {
 		word w = d->w[i];
-		if (w.value > 0)
 			printf("%i %s\n", w.value, w.key);
 	}
 }
