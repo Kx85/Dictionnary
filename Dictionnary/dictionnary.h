@@ -12,7 +12,7 @@ typedef struct dictionnary {
 
 
 void dictionnaryUsage();
-int readDicFile(char* s_dicFile, int length);
+int readDicFile(p_dictionnary d, char* s_dicFile);
 
 p_dictionnary createNewDictionnary();
 void freeDictionnary(p_dictionnary d);

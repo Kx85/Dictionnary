@@ -9,26 +9,90 @@
 #include "common.h"
 #include "dictionnary.h"
 
+char* getInput() {
+    unsigned int len_max = __MAX_INPUT_SIZE__;
+    unsigned int current_size = len_max;
+    char* pStr = malloc(len_max);
 
+    printf("Enter commande: \n");
+
+    if (pStr != NULL)
+    {
+        int c = EOF;
+        unsigned int i = 0;
+        //accept user input until hit enter or end of file
+        while ((c = getchar()) != '\n' && c != EOF)
+        {
+            pStr[i++] = (char)c;
+
+            //if i reached maximize size then realloc size
+            if (i == current_size)
+            {
+                current_size = i + len_max;
+                pStr = realloc(pStr, current_size);
+            }
+        }
+
+        pStr[i] = '\0';
+
+    }
+
+    return pStr;
+}
+
+void processWordcountCommand(char* context) {
+    dictionnary* d = createNewDictionnary();
+    char* ptr = NULL;
+    char seps[] = " \n";
+    int wordCount = 0;
+    int error = 0;
+
+    ptr = strtok_s(NULL, seps, &context);
+    if (ptr == NULL) {
+        dictionnaryUsage();
+        return;
+    }
+
+    error = readDicFile(d, ptr);
+    if (error != 0) {
+        dictionnaryUsage();
+        return;
+    }
+
+    ptr = strtok_s(NULL, seps, &context);
+    if (ptr == NULL) {
+        dictionnaryUsage();
+        return;
+    }
+
+    while (ptr != NULL) {
+        wordCount++;
+        incWordValue(d, ptr);
+        ptr = strtok_s(NULL, seps, &context);
+    }
+
+    displayDictionnary(d);
+    printf("%i total word(s)\n\n", wordCount);
+    freeDictionnary(d);
+    //wordcount resources/dico.txt
+}
 
 int main()
 {
     bool stopLoop = false;
-    char input[__MAX_INPUT_SIZE__];
-
-    dictionnary* d = createNewDictionnary();
-    updateWord(d, "Test", 2);
-    updateWord(d, "Test2", 3);
+    char *input,*context;
 
     while (!stopLoop) {
-        displayDictionnary(d);
-        printf("Enter commande: \n");
-        fgets(input, __MAX_INPUT_SIZE__, stdin);
-        printf("Commande: %s", input);
 
-        if (strcmp(input, "q")) {
-            stopLoop = !stopLoop;
+        input = getInput();
+        char* ptr = strtok_s(input, " ", &context);
+
+        if (ptr != NULL) {
+            if (strcmp(ptr, __WORD_COUNT_COMMAND__) == 0) {
+                processWordcountCommand(context);
+            }
         }
+
 
     }
 }

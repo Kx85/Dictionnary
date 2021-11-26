@@ -30,4 +30,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\dico.txt">
+      <Filter>Fichiers de ressources</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
